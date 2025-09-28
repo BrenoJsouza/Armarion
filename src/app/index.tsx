@@ -1,13 +1,16 @@
-import React, { useState } from "react";
-import { StyleSheet, View , Text , TextInput, KeyboardAvoidingView , Platform , ScrollView, 
-        ImageBackground , SafeAreaView , Image } from "react-native";
-import { Button1, Button2 } from "../components/button";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import HomeScreen from "./home";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet, View, Text, KeyboardAvoidingView, Platform, ScrollView,
+  ImageBackground, SafeAreaView } from "react-native";
 
-export default function LoginScreen() {
-  const [inputName, setInputName] = useState("");
-  const saveUsername = async (username) => {
+import { Input } from "../components/input";
+import { Button1 } from "../components/button";
+import { LogoL } from "../components/logo";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from 'expo-router';
+
+const saveUsername = async (username: string) => {
   try {
     await AsyncStorage.setItem("username", username);
   } catch (e) {
@@ -15,15 +18,30 @@ export default function LoginScreen() {
   }
 };
 
-const getUsername = async () => {
-  try {
-    const name = await AsyncStorage.getItem("username");
-    return name;
-  } catch (e) {
-    console.log("Erro ao carregar nome:", e);
-    return null;
-  }
-};
+export default function LoginScreen() {
+  const [inputName, setInputName] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUsername = async () => {
+      const savedName = await AsyncStorage.getItem("username");
+      if (savedName) {
+        router.replace("/home"); // ignora login se já tiver nome
+      }
+    };
+    checkUsername();
+  }, [router]);
+
+  const handleLogin = async () => {
+    if (!inputName.trim()) {
+      alert("Digite um nome!");
+      return;
+    }
+    await saveUsername(inputName);
+    router.push("/home");
+  };
+
+
 
   return (
     <ImageBackground
@@ -41,34 +59,24 @@ const getUsername = async () => {
             contentContainerStyle={styles.container}
             keyboardShouldPersistTaps="handled"
           >
-            <Image source={require("../../assets/logo-armarionB.png")} style={styles.logo}/>
+            <LogoL />
             <View>
-                
-                <Text style={styles.title}>Bem Vindo!</Text>
-                <Text style={styles.subtitle}>Esse app tem como foco em aumentar a eficiencia da ida até o mercado.</Text>
-                <Text style={styles.subtitle}>Evitando que você acabe comprando algo que ja tinha e/ou esquecendo de comprar algo que realmente precisava.</Text>
-            </View> 
+              <Text style={styles.title}>Bem Vindo!</Text>
+              <Text style={styles.subtitle}>Esse app tem como foco em aumentar a eficiencia da ida até o mercado.</Text>
+              <Text style={styles.subtitle}>Evitando que você acabe comprando algo que ja tinha e/ou esquecendo de comprar algo que realmente precisava.</Text>
+            </View>
 
             <Text style={styles.title}>Usuário</Text>
 
             <Text style={styles.label}>Como gostaria de ser chamada(o):</Text>
-            <TextInput
-              style={styles.input}
+            <Input
               value={inputName}
               onChangeText={setInputName}
               autoCapitalize="none"
               returnKeyType="next"
               accessibilityLabel="Nome de usuário"
             />
-
-              <Button1  onPress={() => {
-                if (!inputName.trim()) {
-                    alert("Digite um nome antes de continuar!");
-                    return;}
-                saveUsername(inputName); 
-                navigation.navigate("Home");}}/>
-           
-          
+            <Button1 onPress={handleLogin} />
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -92,34 +100,17 @@ const styles = StyleSheet.create({
   },
   label: {
     width: "90%",
-    textAlign: "center",  
+    textAlign: "center",
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 6,
     color: "#FFF"
   },
-  input: {
-    width: "90%",
-    height: 52,
-    backgroundColor: "#f9f9f9", 
-    borderWidth: 2,             
-    borderColor: "#333",        
-    borderRadius: 16,
-    paddingHorizontal: 15,
-    fontSize: 18,
-    marginBottom: 15,
-  },
   subtitle: {
-        color: "#F28C38",     
-        fontSize: 18,
-        paddingBottom: 20,
-        fontWeight: "bold",
-        textAlign: "center",
-  },
-  logo: {
-  width: 140,
-  height: 140,
-  resizeMode: "contain",
-  alignSelf: "center",
+    color: "#F28C38",
+    fontSize: 18,
+    paddingBottom: 20,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
