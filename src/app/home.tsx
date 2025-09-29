@@ -4,7 +4,7 @@ import { ImageBackground , KeyboardAvoidingView , Platform , ScrollView , StyleS
          Text , View , Alert } from 'react-native';
 
 import Categoria from '../components/categoria';
-import { LogoH } from '../components/Logo';
+import { LogoH } from '../components/logo';
 import { Button3 } from '../components/button';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
