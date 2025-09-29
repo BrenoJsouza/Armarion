@@ -5,7 +5,7 @@ import {
 
 import { Input } from "../components/input";
 import { Button1 } from "../components/button";
-import { LogoL } from "../components/logo";
+import { LogoL } from "../components/Logo";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from 'expo-router';

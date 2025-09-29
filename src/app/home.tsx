@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
-import { ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { ImageBackground , KeyboardAvoidingView , Platform , ScrollView , StyleSheet ,
+         Text , View , Alert } from 'react-native';
+
 import Categoria from '../components/categoria';
-import { LogoH } from '../components/logo';
+import { LogoH } from '../components/Logo';
+import { Button3 } from '../components/button';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export default function HomeScreen() {
   const [username, setUsername] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const loadUsername = async () => {
@@ -17,8 +21,16 @@ export default function HomeScreen() {
     loadUsername();
   }, []);
 
-  return (
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.clear(); // ou removeItem('username') se quiser manter outros dados
+      router.replace("/"); // redireciona para index.tsx
+    } catch (error) {
+      Alert.alert('Erro ao sair', 'Não foi possível limpar os dados.');
+    }
+  };
 
+  return (
     <ImageBackground
       source={require("../../assets/fundoDeHome.png")}
       style={{ flex: 1 }}
@@ -26,7 +38,9 @@ export default function HomeScreen() {
     >
       <View style={styles.menu}>
         <LogoH />
-        <Text style={styles.name}>Bem-vindo, {username || 'visitante'}!</Text>
+        <View style={{ alignItems: 'flex-end' }}>
+          <Text style={styles.name}>Bem-vindo, {username || 'visitante'}!</Text>
+        </View>
       </View>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -47,11 +61,10 @@ export default function HomeScreen() {
           <Categoria nome="Bazar." />
           <Categoria nome="Lavanderia." />
           <Categoria nome="Higiene Pessoal." />
-
-        </ScrollView >
+          <Button3 onPress={handleLogout} />
+        </ScrollView>
       </KeyboardAvoidingView>
     </ImageBackground>
-
   );
 }
 
@@ -63,9 +76,11 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   menu: {
-    width: 260,
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
     marginTop: 60,
   },
   title: {
@@ -74,5 +89,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "justify",
     color: "#000000ff",
-  }
-})
+  },
+});

@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-  ScrollView,
-  TouchableOpacityProps,
-  Modal,
+  View, Text, TouchableOpacity, TextInput, Alert,
+  ScrollView, TouchableOpacityProps, Modal
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { styles } from './styles';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Item = {
   id: number;
@@ -97,7 +92,9 @@ export default function Categoria({ nome, ...rest }: Props) {
         </View>
 
         {items.map((item) => (
-          <View key={item.id} style={styles.itemBox}>
+          <View key={item.id} style={[ styles.itemBox, 
+                item.quantidade === 0 && { backgroundColor: '#fd1212ff' } ]}>
+
             <Text style={styles.itemNome}>{item.nome}</Text>
 
             <View style={styles.quantidadeBox}>

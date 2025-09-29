@@ -13,8 +13,15 @@ export function Button1({...rest}: Props){
 }
 export function Button2({...rest}: Props){
     return(
-        <TouchableOpacity activeOpacity={0.3}  style={styles.ButtonC}>
+        <TouchableOpacity activeOpacity={0.3}  style={styles.ButtonB} {...rest}>
             <Text style={styles.txtLogin}>Criar nova Conta</Text>
         </TouchableOpacity>
     )
 }   
+export function Button3({...rest}: Props){
+    return(
+        <TouchableOpacity activeOpacity={0.2}  style={styles.ButtonL} {...rest}>
+            <Text style={styles.txtLogin}>Sair</Text>
+        </TouchableOpacity>
+    )
+} 

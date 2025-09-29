@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    ButtonC: {
+    ButtonB: {
         width: 170,
         height: 50,
         backgroundColor: "#f13636ff",
@@ -22,5 +22,12 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 20,
         gap: 16,
-    }
+    },
+    ButtonL: {
+    backgroundColor: "#d30707da",
+    borderRadius: 15,
+    padding: 10,
+    alignItems: "center",
+    width: 130,
+  },
 })
